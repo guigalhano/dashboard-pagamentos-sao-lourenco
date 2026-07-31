@@ -591,16 +591,13 @@
             }
         }
 
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', atualizarTotais);
-        });
-
         window.addEventListener('load', () => {
             carregarDados();
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', atualizarTotais);
+            });
             atualizarTotais();
         });
-
-        atualizarTotais();
     </script>
 </body>
 </html>
