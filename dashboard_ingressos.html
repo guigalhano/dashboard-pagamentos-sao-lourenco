@@ -246,6 +246,26 @@
             text-align: center;
         }
 
+        .btn-home {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            color: #666;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-home:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 1024px) {
             th, td {
                 padding: 8px 4px;
@@ -411,6 +431,10 @@
 
             <div class="info-mes">
                 ℹ️ Os valores são atualizados automaticamente. A última linha mostra o total por mês.
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="index.html" class="btn-home">← Voltar para o Menu</a>
             </div>
         </div>
     </div>
