@@ -240,6 +240,64 @@
             text-align: center;
         }
 
+        .pix-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+        }
+
+        .pix-info {
+            text-align: center;
+        }
+
+        .pix-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pix-key {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+
+        .btn-copy {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-copy:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-copy:active {
+            transform: translateY(0);
+        }
+
         /* RESPONSIVO PARA CELULAR */
         @media (max-width: 768px) {
             body {
@@ -412,6 +470,15 @@
                         <div class="stat-value" id="totalPessoas">0</div>
                         <div class="stat-label">Pessoas</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- CHAVE PIX -->
+            <div class="pix-card">
+                <div class="pix-info">
+                    <div class="pix-label">📲 CHAVE PIX PARA PAGAMENTO</div>
+                    <div class="pix-key">31988324044</div>
+                    <button class="btn-copy" onclick="copiarPix()">Copiar</button>
                 </div>
             </div>
 
@@ -686,6 +753,20 @@
                 });
                 atualizarTotais();
             }
+        }
+
+        function copiarPix() {
+            const pixKey = '31988324044';
+            navigator.clipboard.writeText(pixKey).then(() => {
+                const btn = event.target;
+                const textoOriginal = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = textoOriginal;
+                    btn.style.background = '';
+                }, 2000);
+            });
         }
 
         function salvarDados() {
