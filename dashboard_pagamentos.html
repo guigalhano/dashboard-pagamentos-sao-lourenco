@@ -343,6 +343,39 @@
             border: 2px solid #667eea;
         }
 
+        .costs-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+        }
+
+        .cost-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cost-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
         .btn-copy {
             background: #667eea;
             color: white;
@@ -578,6 +611,18 @@
                     <div class="pix-label">📲 CHAVE PIX PARA PAGAMENTO</div>
                     <div class="pix-key">31988324044</div>
                     <button class="btn-copy" onclick="copiarPix()">Copiar</button>
+                </div>
+            </div>
+
+            <!-- CUSTOS -->
+            <div class="costs-card">
+                <div class="cost-item">
+                    <span class="cost-label">Valor para filh@s:</span>
+                    <span class="cost-value">R$ 1.000</span>
+                </div>
+                <div class="cost-item">
+                    <span class="cost-label">Valor para net@s:</span>
+                    <span class="cost-value">R$ 400</span>
                 </div>
             </div>
 
