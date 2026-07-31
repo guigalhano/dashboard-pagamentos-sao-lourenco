@@ -59,12 +59,38 @@
             order: -1;
         }
 
+        .total-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .total-section {
+            text-align: left;
+        }
+
+        .falta-section {
+            text-align: right;
+            padding-top: 5px;
+        }
+
         .total-card h2 {
             color: #666;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+        }
+
+        .falta-label {
+            color: #ff6b6b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
         .total-value {
@@ -72,7 +98,30 @@
             font-weight: 700;
             color: #667eea;
             line-height: 1;
+            margin-bottom: 0;
+        }
+
+        .falta-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ff6b6b;
+            line-height: 1;
+        }
+
+        .meta-info {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            padding: 8px;
+            background: #f8f9ff;
+            border-radius: 5px;
             margin-bottom: 10px;
+        }
+
+        .meta-info strong {
+            color: #333;
+            font-weight: 600;
         }
 
         .progress-bar {
@@ -322,8 +371,31 @@
                 margin-bottom: 15px;
             }
 
+            .total-header {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .falta-section {
+                text-align: left;
+                padding-top: 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
             .total-value {
-                font-size: 36px;
+                font-size: 32px;
+            }
+
+            .falta-value {
+                font-size: 28px;
+            }
+
+            .meta-info {
+                font-size: 11px;
+                margin-top: 8px;
+                padding: 6px;
             }
 
             .stats {
@@ -448,10 +520,21 @@
         <div class="main-content">
             <!-- TOTAL NO TOPO -->
             <div class="total-card">
-                <h2>Total Arrecadado</h2>
-                <div class="total-value" id="totalGeral">R$ 0,00</div>
+                <div class="total-header">
+                    <div class="total-section">
+                        <h2>Total Arrecadado</h2>
+                        <div class="total-value" id="totalGeral">R$ 0,00</div>
+                    </div>
+                    <div class="falta-section">
+                        <div class="falta-label">Falta Arrecadar</div>
+                        <div class="falta-value" id="faltaArrecadar">R$ 12.000,00</div>
+                    </div>
+                </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="meta-info">
+                    <span>Valor necessário: <strong>R$ 12.000,00</strong></span>
                 </div>
                 <div class="stats">
                     <div class="stat">
@@ -668,6 +751,8 @@
         const totalOutubroEl = document.getElementById('totalOutubro');
         const totalPessoasEl = document.getElementById('totalPessoas');
         const progressFill = document.getElementById('progressFill');
+        const faltaArrecadarEl = document.getElementById('faltaArrecadar');
+        const META = 12000;
 
         function atualizarTotais() {
             let totalGeral = 0;
@@ -706,8 +791,10 @@
             totalOutubroEl.textContent = formatarMoeda(totalOutubro);
             totalPessoasEl.textContent = pessoasComPagamento;
 
-            const meta = 10000;
-            const percentual = Math.min((totalGeral / meta) * 100, 100);
+            const falta = Math.max(META - totalGeral, 0);
+            faltaArrecadarEl.textContent = formatarMoeda(falta);
+
+            const percentual = Math.min((totalGeral / META) * 100, 100);
             progressFill.style.width = percentual + '%';
 
             salvarDados();
