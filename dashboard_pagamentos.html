@@ -786,7 +786,23 @@
         </div>
     </div>
 
+    <!-- Firebase (sincroniza os dados entre todos os dispositivos) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtge7zxANXE853dLatA-s2MKDnr8IjL0A",
+            authDomain: "sao-lourenco-5ae34.firebaseapp.com",
+            databaseURL: "https://sao-lourenco-5ae34-default-rtdb.firebaseio.com",
+            projectId: "sao-lourenco-5ae34",
+            storageBucket: "sao-lourenco-5ae34.firebasestorage.app",
+            messagingSenderId: "14097658290",
+            appId: "1:14097658290:web:1e697a6e86e1361cbeb4ab"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref('pagamentos');
+        let salvarTimeout = null;
+
         const tabela = document.getElementById('tabelaPagamentos');
         const totalGeralEl = document.getElementById('totalGeral');
         const totalAgostoEl = document.getElementById('totalAgosto');
@@ -834,8 +850,6 @@
 
             const percentual = Math.min((totalGeral / META) * 100, 100);
             progressFill.style.width = percentual + '%';
-
-            salvarDados();
         }
 
         function formatarMoeda(valor) {
@@ -876,7 +890,13 @@
                     input.value = '';
                 });
                 atualizarTotais();
+                salvarDados();
             }
+        }
+
+        function agendarSalvar() {
+            clearTimeout(salvarTimeout);
+            salvarTimeout = setTimeout(salvarDados, 400);
         }
 
         function copiarPix() {
@@ -902,31 +922,45 @@
                 };
             });
             localStorage.setItem('pagamentosSaoLourenco', JSON.stringify(dados));
+            dbRef.set(dados).catch(err => console.error('Erro ao salvar no Firebase:', err));
         }
 
-        function carregarDados() {
-            const dados = localStorage.getItem('pagamentosSaoLourenco');
-            if (dados) {
-                const parsed = JSON.parse(dados);
-                document.querySelectorAll('#tabelaPagamentos tbody tr').forEach((row, index) => {
-                    if (parsed[index]) {
-                        row.querySelector('.mes-agosto').value = parsed[index].agosto;
-                        row.querySelector('.mes-setembro').value = parsed[index].setembro;
+        function aplicarDados(parsed) {
+            if (!parsed) return;
+            document.querySelectorAll('#tabelaPagamentos tbody tr').forEach((row, index) => {
+                if (parsed[index]) {
+                    const inputAgosto = row.querySelector('.mes-agosto');
+                    const inputSetembro = row.querySelector('.mes-setembro');
+                    // não sobrescreve o campo que a pessoa está digitando agora
+                    if (inputAgosto && document.activeElement !== inputAgosto) {
+                        inputAgosto.value = parsed[index].agosto || '';
                     }
-                });
-            }
+                    if (inputSetembro && document.activeElement !== inputSetembro) {
+                        inputSetembro.value = parsed[index].setembro || '';
+                    }
+                }
+            });
+            atualizarTotais();
         }
+
+        // Carrega os dados salvos e passa a escutar atualizações em tempo real
+        // vindas de qualquer outro dispositivo/pessoa acessando o dashboard.
+        dbRef.on('value', (snapshot) => {
+            aplicarDados(snapshot.val());
+        }, (err) => {
+            console.error('Erro ao conectar no Firebase:', err);
+        });
 
         document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', atualizarTotais);
+            input.addEventListener('input', () => {
+                atualizarTotais();
+                agendarSalvar();
+            });
         });
 
         window.addEventListener('load', () => {
-            carregarDados();
             atualizarTotais();
         });
-
-        atualizarTotais();
     </script>
 </body>
 </html>
