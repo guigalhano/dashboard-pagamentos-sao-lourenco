@@ -426,7 +426,6 @@
 
             <div class="botoes">
                 <button class="btn-export" onclick="exportarCSV()">📊 Exportar</button>
-                <button class="btn-reset" onclick="limparDados()">🔄 Limpar</button>
             </div>
 
             <div class="info-mes">
@@ -551,16 +550,6 @@
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
-        }
-
-        function limparDados() {
-            if (confirm('Deseja realmente limpar todos os dados?')) {
-                document.querySelectorAll('input[type="number"]').forEach(input => {
-                    input.value = '';
-                });
-                atualizarTotais();
-                salvarDados();
-            }
         }
 
         function agendarSalvar() {
