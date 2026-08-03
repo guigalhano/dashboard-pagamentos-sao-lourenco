@@ -439,7 +439,23 @@
         </div>
     </div>
 
+    <!-- Firebase (sincroniza os dados entre todos os dispositivos) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtge7zxANXE853dLatA-s2MKDnr8IjL0A",
+            authDomain: "sao-lourenco-5ae34.firebaseapp.com",
+            databaseURL: "https://sao-lourenco-5ae34-default-rtdb.firebaseio.com",
+            projectId: "sao-lourenco-5ae34",
+            storageBucket: "sao-lourenco-5ae34.firebasestorage.app",
+            messagingSenderId: "14097658290",
+            appId: "1:14097658290:web:1e697a6e86e1361cbeb4ab"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref('ingressos');
+        let salvarTimeout = null;
+
         const totalGeralEl = document.getElementById('totalGeral');
         const META = 50000;
 
@@ -487,8 +503,6 @@
             if (totalGeralTabelaEl) {
                 totalGeralTabelaEl.textContent = formatarMoeda(totalGeral);
             }
-
-            salvarDados();
         }
 
         function formatarMoeda(valor) {
@@ -545,7 +559,13 @@
                     input.value = '';
                 });
                 atualizarTotais();
+                salvarDados();
             }
+        }
+
+        function agendarSalvar() {
+            clearTimeout(salvarTimeout);
+            salvarTimeout = setTimeout(salvarDados, 400);
         }
 
         function salvarDados() {
@@ -563,38 +583,42 @@
                 };
             });
             localStorage.setItem('ingressosSaoLourenco', JSON.stringify(dados));
+            dbRef.set(dados).catch(err => console.error('Erro ao salvar no Firebase:', err));
         }
 
-        function carregarDados() {
-            const dados = localStorage.getItem('ingressosSaoLourenco');
-            if (dados) {
-                const parsed = JSON.parse(dados);
-                const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
-                rows.forEach((row, index) => {
-                    if (index === rows.length - 1) return;
-                    if (parsed[index]) {
-                        const julho = row.querySelector('.mes-julho');
-                        const agosto = row.querySelector('.mes-agosto');
-                        const setembro = row.querySelector('.mes-setembro');
-                        const outubro = row.querySelector('.mes-outubro');
-                        const novembro = row.querySelector('.mes-novembro');
-                        const dezembro = row.querySelector('.mes-dezembro');
-
-                        if (julho) julho.value = parsed[index].julho;
-                        if (agosto) agosto.value = parsed[index].agosto;
-                        if (setembro) setembro.value = parsed[index].setembro;
-                        if (outubro) outubro.value = parsed[index].outubro;
-                        if (novembro) novembro.value = parsed[index].novembro;
-                        if (dezembro) dezembro.value = parsed[index].dezembro;
-                    }
-                });
-            }
+        function aplicarDados(parsed) {
+            if (!parsed) return;
+            const meses = ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+            const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
+            rows.forEach((row, index) => {
+                if (index === rows.length - 1) return;
+                if (parsed[index]) {
+                    meses.forEach(mes => {
+                        const input = row.querySelector(`.mes-${mes}`);
+                        // não sobrescreve o campo que a pessoa está digitando agora
+                        if (input && document.activeElement !== input) {
+                            input.value = parsed[index][mes] || '';
+                        }
+                    });
+                }
+            });
+            atualizarTotais();
         }
+
+        // Carrega os dados salvos e passa a escutar atualizações em tempo real
+        // vindas de qualquer outro dispositivo/pessoa acessando o dashboard.
+        dbRef.on('value', (snapshot) => {
+            aplicarDados(snapshot.val());
+        }, (err) => {
+            console.error('Erro ao conectar no Firebase:', err);
+        });
 
         window.addEventListener('load', () => {
-            carregarDados();
             document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener('input', atualizarTotais);
+                input.addEventListener('input', () => {
+                    atualizarTotais();
+                    agendarSalvar();
+                });
             });
             atualizarTotais();
         });
