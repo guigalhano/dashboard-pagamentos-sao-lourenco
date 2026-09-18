@@ -10,7 +10,7 @@ Ou acesse diretamente via GitHub Pages quando configurado.
 
 ## 🎫 Ingressos e Gastos
 
-O [dashboard_ingressos.html](dashboard_ingressos.html) faz o controle mensal de julho a dezembro:
+O [dashboard_ingressos.html](dashboard_ingressos.html) faz o controle mensal de agosto a dezembro:
 
 - **Ingressos** por irmão, mês a mês
 - **Gastos** (luz, água, alarme e outros que você pode adicionar/remover)

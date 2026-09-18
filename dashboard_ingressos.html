@@ -422,7 +422,7 @@
     <div class="container">
         <div class="header">
             <h1>💰 Ingressos e Gastos - São Lourenço</h1>
-            <p>Controle mensal de receitas e despesas - Julho a Dezembro 2026</p>
+            <p>Controle mensal de receitas e despesas - Agosto a Dezembro 2026</p>
         </div>
 
         <div class="main-content">
@@ -451,7 +451,6 @@
                             <tr>
                                 <th>Irmão</th>
                                 <th>Valor</th>
-                                <th>Jul</th>
                                 <th>Ago</th>
                                 <th>Set</th>
                                 <th>Out</th>
@@ -464,7 +463,6 @@
                             <tr>
                                 <td>TASSINHO</td>
                                 <td>110</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -475,7 +473,6 @@
                             <tr>
                                 <td>MARIALICE</td>
                                 <td>135</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -486,7 +483,6 @@
                             <tr>
                                 <td>TARCÍSIO</td>
                                 <td>135</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -497,7 +493,6 @@
                             <tr>
                                 <td>MARIÂNGELA</td>
                                 <td>110</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -508,7 +503,6 @@
                             <tr>
                                 <td>TULIO</td>
                                 <td>135</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -519,7 +513,6 @@
                             <tr>
                                 <td>TELMO</td>
                                 <td>110</td>
-                                <td><input type="number" class="mes-julho" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-agosto" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-setembro" placeholder="0" min="0" step="0.01"></td>
                                 <td><input type="number" class="mes-outubro" placeholder="0" min="0" step="0.01"></td>
@@ -530,7 +523,6 @@
                             <tr>
                                 <td>TOTAL MÊS</td>
                                 <td>-</td>
-                                <td id="total-julho">R$ 0</td>
                                 <td id="total-agosto">R$ 0</td>
                                 <td id="total-setembro">R$ 0</td>
                                 <td id="total-outubro">R$ 0</td>
@@ -550,7 +542,6 @@
                         <thead>
                             <tr>
                                 <th>Gasto</th>
-                                <th>Jul</th>
                                 <th>Ago</th>
                                 <th>Set</th>
                                 <th>Out</th>
@@ -597,21 +588,12 @@
         let salvarTimeout = null;
         let salvarGastosTimeout = null;
 
-        const MESES = ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-        const MESES_LABEL = {
-            julho: 'Julho',
-            agosto: 'Agosto',
-            setembro: 'Setembro',
-            outubro: 'Outubro',
-            novembro: 'Novembro',
-            dezembro: 'Dezembro'
-        };
-
+        const MESES = ['agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
         // Gastos iniciais: valem enquanto ninguem tiver salvo nada no Firebase
         const GASTOS_PADRAO = [
-            { nome: 'Luz', julho: '', agosto: '', setembro: '136.43', outubro: '', novembro: '', dezembro: '' },
-            { nome: 'Água', julho: '', agosto: '', setembro: '127.83', outubro: '', novembro: '', dezembro: '' },
-            { nome: 'Alarme', julho: '', agosto: '', setembro: '113.00', outubro: '', novembro: '', dezembro: '' }
+            { nome: 'Luz', agosto: '', setembro: '136.43', outubro: '', novembro: '', dezembro: '' },
+            { nome: 'Água', agosto: '', setembro: '127.83', outubro: '', novembro: '', dezembro: '' },
+            { nome: 'Alarme', agosto: '', setembro: '113.00', outubro: '', novembro: '', dezembro: '' }
         ];
 
         let gastosData = GASTOS_PADRAO.map(g => Object.assign({}, g));
@@ -833,7 +815,7 @@
         function exportarCSV() {
             const SEP = ';';
             let csv = '\ufeffINGRESSOS\n';
-            csv += ['Irmão', 'Valor', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
+            csv += ['Irmão', 'Valor', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
 
             const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
             rows.forEach((row, index) => {
@@ -853,7 +835,7 @@
                 .concat([document.getElementById('total-geral-tabela').textContent]).join(SEP) + '\n';
 
             csv += '\nGASTOS\n';
-            csv += ['Gasto', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
+            csv += ['Gasto', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
             linhasGastos().forEach(row => {
                 const nome = row.querySelector('.gasto-nome').value;
                 const valores = MESES.map(mes => num(row.querySelector('.gasto-' + mes).value));
@@ -885,14 +867,11 @@
             const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
             rows.forEach((row, index) => {
                 if (index === rows.length - 1) return;
-                dados[index] = {
-                    julho: row.querySelector('.mes-julho').value || '',
-                    agosto: row.querySelector('.mes-agosto').value || '',
-                    setembro: row.querySelector('.mes-setembro').value || '',
-                    outubro: row.querySelector('.mes-outubro').value || '',
-                    novembro: row.querySelector('.mes-novembro').value || '',
-                    dezembro: row.querySelector('.mes-dezembro').value || ''
-                };
+                const linha = {};
+                MESES.forEach(mes => {
+                    linha[mes] = row.querySelector('.mes-' + mes).value || '';
+                });
+                dados[index] = linha;
             });
             localStorage.setItem('ingressosSaoLourenco', JSON.stringify(dados));
             dbRef.set(dados).catch(err => console.error('Erro ao salvar no Firebase:', err));
