@@ -324,8 +324,7 @@
             background: #fee2e2;
         }
 
-        #tabelaGastos td:nth-child(2),
-        #tabelaResumo td:nth-child(2) {
+        #tabelaGastos td:nth-child(2) {
             background: transparent;
             font-weight: 500;
         }
@@ -370,23 +369,6 @@
             background: #dc2626;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-
-        #tabelaResumo thead {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-        }
-
-        #tabelaResumo tbody tr:hover {
-            background-color: #eef2ff;
-        }
-
-        #tabelaResumo tbody tr:last-child {
-            border-top: 3px solid #4f46e5;
-            background: #eef2ff;
-        }
-
-        #tabelaResumo tbody tr:last-child td:first-child {
-            background: #e0e7ff;
         }
 
         @media (max-width: 1024px) {
@@ -458,9 +440,6 @@
                         <h2>Saldo</h2>
                         <div class="total-value" id="saldoGeral">R$ 0,00</div>
                     </div>
-                </div>
-                <div class="meta-info">
-                    Período: <strong>Julho a Dezembro 2026</strong>
                 </div>
             </div>
 
@@ -589,30 +568,8 @@
                 </div>
             </div>
 
-            <div class="table-section">
-                <div class="titulo-secao">📈 Resumo mensal</div>
-                <div class="table-wrapper">
-                    <table id="tabelaResumo">
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Ingressos</th>
-                                <th>Gastos</th>
-                                <th>Saldo do mês</th>
-                                <th>Saldo acumulado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpoResumo"></tbody>
-                    </table>
-                </div>
-            </div>
-
             <div class="botoes">
                 <button class="btn-export" onclick="exportarCSV()">📊 Exportar</button>
-            </div>
-
-            <div class="info-mes">
-                ℹ️ Os valores são atualizados automaticamente e sincronizados entre todos os dispositivos. O saldo é ingressos menos gastos.
             </div>
 
             <div style="text-align: center; margin-top: 20px;">
@@ -663,7 +620,6 @@
         const totalGastosEl = document.getElementById('totalGastos');
         const saldoGeralEl = document.getElementById('saldoGeral');
         const corpoGastos = document.getElementById('corpoGastos');
-        const corpoResumo = document.getElementById('corpoResumo');
 
         function formatarMoeda(valor) {
             return new Intl.NumberFormat('pt-BR', {
@@ -864,41 +820,6 @@
             const saldo = totalIngressos - totalGastos;
             saldoGeralEl.textContent = formatarMoeda(saldo);
             pintarSaldo(saldoGeralEl, saldo);
-
-            atualizarResumo(totaisIngressos, totaisGastos, totalIngressos, totalGastos);
-        }
-
-        function atualizarResumo(totaisIngressos, totaisGastos, totalIngressos, totalGastos) {
-            let acumulado = 0;
-            let html = '';
-
-            MESES.forEach(mes => {
-                const entrada = totaisIngressos[mes];
-                const saida = totaisGastos[mes];
-                const saldoMes = entrada - saida;
-                acumulado += saldoMes;
-                const classeMes = saldoMes < 0 ? 'valor-negativo' : 'valor-positivo';
-                const classeAcum = acumulado < 0 ? 'valor-negativo' : 'valor-positivo';
-                html += '<tr>' +
-                    '<td>' + MESES_LABEL[mes] + '</td>' +
-                    '<td>' + formatarMoeda(entrada) + '</td>' +
-                    '<td class="valor-gastos">' + formatarMoeda(saida) + '</td>' +
-                    '<td class="' + classeMes + '">' + formatarMoeda(saldoMes) + '</td>' +
-                    '<td class="' + classeAcum + '">' + formatarMoeda(acumulado) + '</td>' +
-                    '</tr>';
-            });
-
-            const saldoTotal = totalIngressos - totalGastos;
-            const classeTotal = saldoTotal < 0 ? 'valor-negativo' : 'valor-positivo';
-            html += '<tr>' +
-                '<td>TOTAL</td>' +
-                '<td>' + formatarMoeda(totalIngressos) + '</td>' +
-                '<td class="valor-gastos">' + formatarMoeda(totalGastos) + '</td>' +
-                '<td class="' + classeTotal + '">' + formatarMoeda(saldoTotal) + '</td>' +
-                '<td class="' + classeTotal + '">' + formatarMoeda(saldoTotal) + '</td>' +
-                '</tr>';
-
-            corpoResumo.innerHTML = html;
         }
 
         // ---------------- EXPORTAR ----------------
@@ -942,12 +863,6 @@
             const totaisGastosTxt = MESES.map(mes => document.getElementById('gasto-total-' + mes).textContent);
             csv += ['TOTAL MÊS'].concat(totaisGastosTxt)
                 .concat([document.getElementById('gasto-total-geral').textContent]).join(SEP) + '\n';
-
-            csv += '\nRESUMO MENSAL\n';
-            csv += ['Mês', 'Ingressos', 'Gastos', 'Saldo do mês', 'Saldo acumulado'].join(SEP) + '\n';
-            corpoResumo.querySelectorAll('tr').forEach(row => {
-                csv += Array.from(row.cells).map(c => c.textContent).join(SEP) + '\n';
-            });
 
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));

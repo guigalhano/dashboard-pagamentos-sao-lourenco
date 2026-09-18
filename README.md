@@ -14,7 +14,7 @@ O [dashboard_ingressos.html](dashboard_ingressos.html) faz o controle mensal de 
 
 - **Ingressos** por irmão, mês a mês
 - **Gastos** (luz, água, alarme e outros que você pode adicionar/remover)
-- **Saldo** de cada mês e saldo acumulado no resumo mensal
+- **Saldo** = ingressos menos gastos
 - Dados sincronizados entre todos os dispositivos via Firebase
 
 ## ✨ Funcionalidades
