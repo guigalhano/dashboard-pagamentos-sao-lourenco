@@ -266,6 +266,129 @@
             transform: translateY(-2px);
         }
 
+
+        .resumo-topo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .resumo-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .resumo-item .total-value {
+            font-size: 32px;
+            margin-bottom: 0;
+        }
+
+        .valor-gastos {
+            color: #ef4444;
+        }
+
+        .valor-positivo {
+            color: #10b981;
+        }
+
+        .valor-negativo {
+            color: #ef4444;
+        }
+
+        .titulo-secao {
+            padding: 14px 16px 0;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            font-weight: 700;
+        }
+
+        #tabelaGastos thead {
+            background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+        }
+
+        #tabelaGastos tbody tr:hover {
+            background-color: #fef2f2;
+        }
+
+        #tabelaGastos tbody tr:last-child {
+            border-top: 3px solid #ef4444;
+            background: #fef2f2;
+        }
+
+        #tabelaGastos tbody tr:last-child td:first-child {
+            background: #fee2e2;
+        }
+
+        #tabelaGastos td:nth-child(2),
+        #tabelaResumo td:nth-child(2) {
+            background: transparent;
+            font-weight: 500;
+        }
+
+        #tabelaGastos input[type="number"]:focus,
+        #tabelaGastos input[type="text"]:focus {
+            outline: none;
+            border-color: #ef4444;
+            background-color: #fef2f2;
+            box-shadow: 0 0 5px rgba(239, 68, 68, 0.1);
+        }
+
+        .gasto-nome {
+            text-align: left !important;
+        }
+
+        .btn-remover {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 16px;
+            padding: 2px 6px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .btn-remover:hover {
+            color: #b91c1c;
+        }
+
+        .acoes-gastos {
+            padding: 12px 16px 16px;
+        }
+
+        .btn-add {
+            background: #ef4444;
+            color: white;
+            padding: 10px 18px;
+        }
+
+        .btn-add:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        #tabelaResumo thead {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        }
+
+        #tabelaResumo tbody tr:hover {
+            background-color: #eef2ff;
+        }
+
+        #tabelaResumo tbody tr:last-child {
+            border-top: 3px solid #4f46e5;
+            background: #eef2ff;
+        }
+
+        #tabelaResumo tbody tr:last-child td:first-child {
+            background: #e0e7ff;
+        }
+
         @media (max-width: 1024px) {
             th, td {
                 padding: 8px 4px;
@@ -306,26 +429,43 @@
             .botoes {
                 grid-template-columns: 1fr;
             }
+
+            .resumo-item .total-value {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>💰 Ingressos - São Lourenço</h1>
-            <p>Controle de receitas - Julho a Dezembro 2026</p>
+            <h1>💰 Ingressos e Gastos - São Lourenço</h1>
+            <p>Controle mensal de receitas e despesas - Julho a Dezembro 2026</p>
         </div>
 
         <div class="main-content">
             <div class="total-card">
-                <h2>Total de Ingressos</h2>
-                <div class="total-value" id="totalGeral">R$ 0,00</div>
+                <div class="resumo-topo">
+                    <div class="resumo-item">
+                        <h2>Total de Ingressos</h2>
+                        <div class="total-value" id="totalGeral">R$ 0,00</div>
+                    </div>
+                    <div class="resumo-item">
+                        <h2>Total de Gastos</h2>
+                        <div class="total-value valor-gastos" id="totalGastos">R$ 0,00</div>
+                    </div>
+                    <div class="resumo-item">
+                        <h2>Saldo</h2>
+                        <div class="total-value" id="saldoGeral">R$ 0,00</div>
+                    </div>
+                </div>
                 <div class="meta-info">
                     Período: <strong>Julho a Dezembro 2026</strong>
                 </div>
             </div>
 
             <div class="table-section">
+                <div class="titulo-secao">🎫 Ingressos</div>
                 <div class="table-wrapper">
                     <table id="tabelaIngressos">
                         <thead>
@@ -424,12 +564,55 @@
                 </div>
             </div>
 
+            <div class="table-section">
+                <div class="titulo-secao">💸 Gastos</div>
+                <div class="table-wrapper">
+                    <table id="tabelaGastos">
+                        <thead>
+                            <tr>
+                                <th>Gasto</th>
+                                <th>Jul</th>
+                                <th>Ago</th>
+                                <th>Set</th>
+                                <th>Out</th>
+                                <th>Nov</th>
+                                <th>Dez</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoGastos"></tbody>
+                    </table>
+                </div>
+                <div class="acoes-gastos">
+                    <button class="btn-add" onclick="adicionarGasto()">+ Adicionar gasto</button>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="titulo-secao">📈 Resumo mensal</div>
+                <div class="table-wrapper">
+                    <table id="tabelaResumo">
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Ingressos</th>
+                                <th>Gastos</th>
+                                <th>Saldo do mês</th>
+                                <th>Saldo acumulado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoResumo"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="botoes">
                 <button class="btn-export" onclick="exportarCSV()">📊 Exportar</button>
             </div>
 
             <div class="info-mes">
-                ℹ️ Os valores são atualizados automaticamente. A última linha mostra o total por mês.
+                ℹ️ Os valores são atualizados automaticamente e sincronizados entre todos os dispositivos. O saldo é ingressos menos gastos.
             </div>
 
             <div style="text-align: center; margin-top: 20px;">
@@ -453,56 +636,34 @@
         };
         firebase.initializeApp(firebaseConfig);
         const dbRef = firebase.database().ref('ingressos');
+        const gastosRef = firebase.database().ref('gastos');
         let salvarTimeout = null;
+        let salvarGastosTimeout = null;
+
+        const MESES = ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+        const MESES_LABEL = {
+            julho: 'Julho',
+            agosto: 'Agosto',
+            setembro: 'Setembro',
+            outubro: 'Outubro',
+            novembro: 'Novembro',
+            dezembro: 'Dezembro'
+        };
+
+        // Gastos iniciais: valem enquanto ninguem tiver salvo nada no Firebase
+        const GASTOS_PADRAO = [
+            { nome: 'Luz', julho: '', agosto: '', setembro: '136.43', outubro: '', novembro: '', dezembro: '' },
+            { nome: 'Água', julho: '', agosto: '', setembro: '127.83', outubro: '', novembro: '', dezembro: '' },
+            { nome: 'Alarme', julho: '', agosto: '', setembro: '113.00', outubro: '', novembro: '', dezembro: '' }
+        ];
+
+        let gastosData = GASTOS_PADRAO.map(g => Object.assign({}, g));
 
         const totalGeralEl = document.getElementById('totalGeral');
-        const META = 50000;
-
-        function atualizarTotais() {
-            const meses = ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-            const totaisMes = {};
-            let totalGeral = 0;
-
-            meses.forEach(mes => totaisMes[mes] = 0);
-
-            const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
-
-            rows.forEach((row, index) => {
-                if (index === rows.length - 1) return;
-
-                let subtotalLinha = 0;
-
-                meses.forEach(mes => {
-                    const input = row.querySelector(`.mes-${mes}`);
-                    if (input && !input.readOnly) {
-                        const valor = parseFloat(input.value) || 0;
-                        subtotalLinha += valor;
-                        totaisMes[mes] += valor;
-                    }
-                });
-
-                const subtotalCell = row.querySelector('.subtotal-linha');
-                if (subtotalCell) {
-                    subtotalCell.textContent = formatarMoeda(subtotalLinha);
-                }
-
-                totalGeral += subtotalLinha;
-            });
-
-            totalGeralEl.textContent = formatarMoeda(totalGeral);
-
-            meses.forEach(mes => {
-                const totalMesEl = document.getElementById(`total-${mes}`);
-                if (totalMesEl) {
-                    totalMesEl.textContent = formatarMoeda(totaisMes[mes]);
-                }
-            });
-
-            const totalGeralTabelaEl = document.getElementById('total-geral-tabela');
-            if (totalGeralTabelaEl) {
-                totalGeralTabelaEl.textContent = formatarMoeda(totalGeral);
-            }
-        }
+        const totalGastosEl = document.getElementById('totalGastos');
+        const saldoGeralEl = document.getElementById('saldoGeral');
+        const corpoGastos = document.getElementById('corpoGastos');
+        const corpoResumo = document.getElementById('corpoResumo');
 
         function formatarMoeda(valor) {
             return new Intl.NumberFormat('pt-BR', {
@@ -513,44 +674,291 @@
             }).format(valor);
         }
 
-        function exportarCSV() {
-            let csv = 'Irmão,Valor,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro,Total\n';
+        function pintarSaldo(el, valor) {
+            el.classList.remove('valor-positivo', 'valor-negativo');
+            el.classList.add(valor < 0 ? 'valor-negativo' : 'valor-positivo');
+        }
 
+        // ---------------- GASTOS ----------------
+
+        function linhasGastos() {
+            const linhas = Array.from(corpoGastos.querySelectorAll('tr'));
+            return linhas.slice(0, Math.max(linhas.length - 1, 0)); // tira a linha de total
+        }
+
+        function lerGastosDoDOM() {
+            return linhasGastos().map(row => {
+                const item = { nome: row.querySelector('.gasto-nome').value };
+                MESES.forEach(mes => {
+                    item[mes] = row.querySelector('.gasto-' + mes).value;
+                });
+                return item;
+            });
+        }
+
+        function renderGastos() {
+            let html = '';
+            gastosData.forEach(item => {
+                const nome = (item.nome || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+                html += '<tr>';
+                html += '<td><input type="text" class="gasto-nome" placeholder="Descricao do gasto" value="' + nome + '"></td>';
+                MESES.forEach(mes => {
+                    html += '<td><input type="number" class="gasto-' + mes + '" placeholder="0" min="0" step="0.01" value="' + (item[mes] || '') + '"></td>';
+                });
+                html += '<td class="subtotal-gasto">R$ 0</td>';
+                html += '<td><button class="btn-remover" title="Remover gasto" onclick="removerGasto(this)">&times;</button></td>';
+                html += '</tr>';
+            });
+
+            html += '<tr><td>TOTAL MÊS</td>';
+            MESES.forEach(mes => {
+                html += '<td id="gasto-total-' + mes + '">R$ 0</td>';
+            });
+            html += '<td id="gasto-total-geral">R$ 0</td><td></td></tr>';
+
+            corpoGastos.innerHTML = html;
+        }
+
+        function atualizarInputsGastos() {
+            linhasGastos().forEach((row, index) => {
+                const item = gastosData[index];
+                if (!item) return;
+                const nome = row.querySelector('.gasto-nome');
+                if (nome && document.activeElement !== nome) nome.value = item.nome || '';
+                MESES.forEach(mes => {
+                    const input = row.querySelector('.gasto-' + mes);
+                    if (input && document.activeElement !== input) input.value = item[mes] || '';
+                });
+            });
+        }
+
+        function adicionarGasto() {
+            gastosData = lerGastosDoDOM();
+            const item = { nome: '' };
+            MESES.forEach(mes => item[mes] = '');
+            gastosData.push(item);
+            renderGastos();
+            atualizarTotais();
+            salvarGastos();
+            const ultima = linhasGastos()[gastosData.length - 1];
+            if (ultima) ultima.querySelector('.gasto-nome').focus();
+        }
+
+        function removerGasto(botao) {
+            const linha = botao.closest('tr');
+            const index = linhasGastos().indexOf(linha);
+            if (index < 0) return;
+            const nome = linha.querySelector('.gasto-nome').value || 'este gasto';
+            if (!confirm('Remover ' + nome + '?')) return;
+            gastosData = lerGastosDoDOM();
+            gastosData.splice(index, 1);
+            renderGastos();
+            atualizarTotais();
+            salvarGastos();
+        }
+
+        function normalizarGastos(val) {
+            if (!val) return GASTOS_PADRAO.map(g => Object.assign({}, g));
+            let itens = val;
+            if (!Array.isArray(val)) {
+                itens = val.itens !== undefined ? val.itens : (val.init !== undefined ? [] : val);
+            }
+            const lista = Array.isArray(itens) ? itens : Object.values(itens || {});
+            return lista.filter(Boolean).map(g => {
+                const item = { nome: g.nome || '' };
+                MESES.forEach(mes => item[mes] = g[mes] || '');
+                return item;
+            });
+        }
+
+        function aplicarGastos(val) {
+            gastosData = normalizarGastos(val);
+            const focoDentro = document.activeElement && document.activeElement.closest
+                && document.activeElement.closest('#tabelaGastos');
+            if (focoDentro && linhasGastos().length === gastosData.length) {
+                atualizarInputsGastos();
+            } else {
+                renderGastos();
+            }
+            atualizarTotais();
+        }
+
+        function agendarSalvarGastos() {
+            clearTimeout(salvarGastosTimeout);
+            salvarGastosTimeout = setTimeout(salvarGastos, 400);
+        }
+
+        function salvarGastos() {
+            gastosData = lerGastosDoDOM();
+            localStorage.setItem('gastosSaoLourenco', JSON.stringify(gastosData));
+            gastosRef.set({ init: true, itens: gastosData })
+                .catch(err => console.error('Erro ao salvar gastos no Firebase:', err));
+        }
+
+        // ---------------- TOTAIS ----------------
+
+        function atualizarTotais() {
+            const totaisIngressos = {};
+            const totaisGastos = {};
+            MESES.forEach(mes => {
+                totaisIngressos[mes] = 0;
+                totaisGastos[mes] = 0;
+            });
+
+            let totalIngressos = 0;
+            let totalGastos = 0;
+
+            // Ingressos
             const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
             rows.forEach((row, index) => {
                 if (index === rows.length - 1) return;
 
-                const irmao = row.cells[0].textContent;
-                const valor = row.cells[1].textContent;
-                const julho = row.querySelector('.mes-julho')?.value || '';
-                const agosto = row.querySelector('.mes-agosto')?.value || '';
-                const setembro = row.querySelector('.mes-setembro')?.value || '';
-                const outubro = row.querySelector('.mes-outubro')?.value || '';
-                const novembro = row.querySelector('.mes-novembro')?.value || '';
-                const dezembro = row.querySelector('.mes-dezembro')?.value || '';
-                const total = row.querySelector('.subtotal-linha').textContent;
+                let subtotalLinha = 0;
+                MESES.forEach(mes => {
+                    const input = row.querySelector('.mes-' + mes);
+                    if (input && !input.readOnly) {
+                        const valor = parseFloat(input.value) || 0;
+                        subtotalLinha += valor;
+                        totaisIngressos[mes] += valor;
+                    }
+                });
 
-                csv += `${irmao},${valor},${julho},${agosto},${setembro},${outubro},${novembro},${dezembro},${total}\n`;
+                const subtotalCell = row.querySelector('.subtotal-linha');
+                if (subtotalCell) subtotalCell.textContent = formatarMoeda(subtotalLinha);
+                totalIngressos += subtotalLinha;
             });
 
-            const totalJulho = document.getElementById('total-julho').textContent;
-            const totalAgosto = document.getElementById('total-agosto').textContent;
-            const totalSetembro = document.getElementById('total-setembro').textContent;
-            const totalOutubro = document.getElementById('total-outubro').textContent;
-            const totalNovembro = document.getElementById('total-novembro').textContent;
-            const totalDezembro = document.getElementById('total-dezembro').textContent;
-            const totalGeralTabela = document.getElementById('total-geral-tabela').textContent;
+            MESES.forEach(mes => {
+                const el = document.getElementById('total-' + mes);
+                if (el) el.textContent = formatarMoeda(totaisIngressos[mes]);
+            });
 
-            csv += `TOTAL MÊS,-,${totalJulho},${totalAgosto},${totalSetembro},${totalOutubro},${totalNovembro},${totalDezembro},${totalGeralTabela}`;
+            const totalGeralTabelaEl = document.getElementById('total-geral-tabela');
+            if (totalGeralTabelaEl) totalGeralTabelaEl.textContent = formatarMoeda(totalIngressos);
+
+            // Gastos
+            linhasGastos().forEach(row => {
+                let subtotalLinha = 0;
+                MESES.forEach(mes => {
+                    const input = row.querySelector('.gasto-' + mes);
+                    const valor = input ? (parseFloat(input.value) || 0) : 0;
+                    subtotalLinha += valor;
+                    totaisGastos[mes] += valor;
+                });
+                const subtotalCell = row.querySelector('.subtotal-gasto');
+                if (subtotalCell) subtotalCell.textContent = formatarMoeda(subtotalLinha);
+                totalGastos += subtotalLinha;
+            });
+
+            MESES.forEach(mes => {
+                const el = document.getElementById('gasto-total-' + mes);
+                if (el) el.textContent = formatarMoeda(totaisGastos[mes]);
+            });
+
+            const gastoTotalGeralEl = document.getElementById('gasto-total-geral');
+            if (gastoTotalGeralEl) gastoTotalGeralEl.textContent = formatarMoeda(totalGastos);
+
+            // Cards do topo
+            totalGeralEl.textContent = formatarMoeda(totalIngressos);
+            totalGastosEl.textContent = formatarMoeda(totalGastos);
+            const saldo = totalIngressos - totalGastos;
+            saldoGeralEl.textContent = formatarMoeda(saldo);
+            pintarSaldo(saldoGeralEl, saldo);
+
+            atualizarResumo(totaisIngressos, totaisGastos, totalIngressos, totalGastos);
+        }
+
+        function atualizarResumo(totaisIngressos, totaisGastos, totalIngressos, totalGastos) {
+            let acumulado = 0;
+            let html = '';
+
+            MESES.forEach(mes => {
+                const entrada = totaisIngressos[mes];
+                const saida = totaisGastos[mes];
+                const saldoMes = entrada - saida;
+                acumulado += saldoMes;
+                const classeMes = saldoMes < 0 ? 'valor-negativo' : 'valor-positivo';
+                const classeAcum = acumulado < 0 ? 'valor-negativo' : 'valor-positivo';
+                html += '<tr>' +
+                    '<td>' + MESES_LABEL[mes] + '</td>' +
+                    '<td>' + formatarMoeda(entrada) + '</td>' +
+                    '<td class="valor-gastos">' + formatarMoeda(saida) + '</td>' +
+                    '<td class="' + classeMes + '">' + formatarMoeda(saldoMes) + '</td>' +
+                    '<td class="' + classeAcum + '">' + formatarMoeda(acumulado) + '</td>' +
+                    '</tr>';
+            });
+
+            const saldoTotal = totalIngressos - totalGastos;
+            const classeTotal = saldoTotal < 0 ? 'valor-negativo' : 'valor-positivo';
+            html += '<tr>' +
+                '<td>TOTAL</td>' +
+                '<td>' + formatarMoeda(totalIngressos) + '</td>' +
+                '<td class="valor-gastos">' + formatarMoeda(totalGastos) + '</td>' +
+                '<td class="' + classeTotal + '">' + formatarMoeda(saldoTotal) + '</td>' +
+                '<td class="' + classeTotal + '">' + formatarMoeda(saldoTotal) + '</td>' +
+                '</tr>';
+
+            corpoResumo.innerHTML = html;
+        }
+
+        // ---------------- EXPORTAR ----------------
+
+        // Excel em portugues abre CSV separado por ponto e virgula e usa virgula
+        // como separador decimal, entao o arquivo sai nesse formato.
+        function num(valor) {
+            return String(valor || '').replace('.', ',');
+        }
+
+        function exportarCSV() {
+            const SEP = ';';
+            let csv = '\ufeffINGRESSOS\n';
+            csv += ['Irmão', 'Valor', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
+
+            const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
+            rows.forEach((row, index) => {
+                if (index === rows.length - 1) return;
+                const irmao = row.cells[0].textContent;
+                const valor = row.cells[1].textContent;
+                const valores = MESES.map(mes => {
+                    const input = row.querySelector('.mes-' + mes);
+                    return num(input ? input.value : '');
+                });
+                const total = row.querySelector('.subtotal-linha').textContent;
+                csv += [irmao, valor].concat(valores).concat([total]).join(SEP) + '\n';
+            });
+
+            const totaisIngressosTxt = MESES.map(mes => document.getElementById('total-' + mes).textContent);
+            csv += ['TOTAL MÊS', '-'].concat(totaisIngressosTxt)
+                .concat([document.getElementById('total-geral-tabela').textContent]).join(SEP) + '\n';
+
+            csv += '\nGASTOS\n';
+            csv += ['Gasto', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Total'].join(SEP) + '\n';
+            linhasGastos().forEach(row => {
+                const nome = row.querySelector('.gasto-nome').value;
+                const valores = MESES.map(mes => num(row.querySelector('.gasto-' + mes).value));
+                const total = row.querySelector('.subtotal-gasto').textContent;
+                csv += [nome].concat(valores).concat([total]).join(SEP) + '\n';
+            });
+            const totaisGastosTxt = MESES.map(mes => document.getElementById('gasto-total-' + mes).textContent);
+            csv += ['TOTAL MÊS'].concat(totaisGastosTxt)
+                .concat([document.getElementById('gasto-total-geral').textContent]).join(SEP) + '\n';
+
+            csv += '\nRESUMO MENSAL\n';
+            csv += ['Mês', 'Ingressos', 'Gastos', 'Saldo do mês', 'Saldo acumulado'].join(SEP) + '\n';
+            corpoResumo.querySelectorAll('tr').forEach(row => {
+                csv += Array.from(row.cells).map(c => c.textContent).join(SEP) + '\n';
+            });
 
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
-            element.setAttribute('download', `ingressos_sao_lourenco_${new Date().toISOString().split('T')[0]}.csv`);
+            element.setAttribute('download', 'ingressos_gastos_sao_lourenco_' + new Date().toISOString().split('T')[0] + '.csv');
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
         }
+
+        // ---------------- SINCRONIZACAO ----------------
 
         function agendarSalvar() {
             clearTimeout(salvarTimeout);
@@ -563,12 +971,12 @@
             rows.forEach((row, index) => {
                 if (index === rows.length - 1) return;
                 dados[index] = {
-                    julho: row.querySelector('.mes-julho')?.value || '',
-                    agosto: row.querySelector('.mes-agosto')?.value || '',
-                    setembro: row.querySelector('.mes-setembro')?.value || '',
-                    outubro: row.querySelector('.mes-outubro')?.value || '',
-                    novembro: row.querySelector('.mes-novembro')?.value || '',
-                    dezembro: row.querySelector('.mes-dezembro')?.value || ''
+                    julho: row.querySelector('.mes-julho').value || '',
+                    agosto: row.querySelector('.mes-agosto').value || '',
+                    setembro: row.querySelector('.mes-setembro').value || '',
+                    outubro: row.querySelector('.mes-outubro').value || '',
+                    novembro: row.querySelector('.mes-novembro').value || '',
+                    dezembro: row.querySelector('.mes-dezembro').value || ''
                 };
             });
             localStorage.setItem('ingressosSaoLourenco', JSON.stringify(dados));
@@ -577,14 +985,13 @@
 
         function aplicarDados(parsed) {
             if (!parsed) return;
-            const meses = ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
             const rows = document.querySelectorAll('#tabelaIngressos tbody tr');
             rows.forEach((row, index) => {
                 if (index === rows.length - 1) return;
                 if (parsed[index]) {
-                    meses.forEach(mes => {
-                        const input = row.querySelector(`.mes-${mes}`);
-                        // não sobrescreve o campo que a pessoa está digitando agora
+                    MESES.forEach(mes => {
+                        const input = row.querySelector('.mes-' + mes);
+                        // nao sobrescreve o campo que a pessoa esta digitando agora
                         if (input && document.activeElement !== input) {
                             input.value = parsed[index][mes] || '';
                         }
@@ -594,7 +1001,10 @@
             atualizarTotais();
         }
 
-        // Carrega os dados salvos e passa a escutar atualizações em tempo real
+        // Primeiro desenho da tabela de gastos, antes de o Firebase responder
+        renderGastos();
+
+        // Carrega os dados salvos e passa a escutar atualizacoes em tempo real
         // vindas de qualquer outro dispositivo/pessoa acessando o dashboard.
         dbRef.on('value', (snapshot) => {
             aplicarDados(snapshot.val());
@@ -602,13 +1012,26 @@
             console.error('Erro ao conectar no Firebase:', err);
         });
 
+        gastosRef.on('value', (snapshot) => {
+            aplicarGastos(snapshot.val());
+        }, (err) => {
+            console.error('Erro ao conectar no Firebase (gastos):', err);
+        });
+
         window.addEventListener('load', () => {
-            document.querySelectorAll('input[type="number"]').forEach(input => {
+            document.querySelectorAll('#tabelaIngressos input[type="number"]').forEach(input => {
                 input.addEventListener('input', () => {
                     atualizarTotais();
                     agendarSalvar();
                 });
             });
+
+            // delegacao: as linhas de gastos sao recriadas a cada render
+            corpoGastos.addEventListener('input', () => {
+                atualizarTotais();
+                agendarSalvarGastos();
+            });
+
             atualizarTotais();
         });
     </script>

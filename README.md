@@ -8,6 +8,15 @@ Dashboard interativo para controle de arrecadação de valores para pintura em S
 
 Ou acesse diretamente via GitHub Pages quando configurado.
 
+## 🎫 Ingressos e Gastos
+
+O [dashboard_ingressos.html](dashboard_ingressos.html) faz o controle mensal de julho a dezembro:
+
+- **Ingressos** por irmão, mês a mês
+- **Gastos** (luz, água, alarme e outros que você pode adicionar/remover)
+- **Saldo** de cada mês e saldo acumulado no resumo mensal
+- Dados sincronizados entre todos os dispositivos via Firebase
+
 ## ✨ Funcionalidades
 
 - ✅ **Entrada de dados em tempo real** - Insira valores de pagamentos
